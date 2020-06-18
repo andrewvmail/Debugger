@@ -10,8 +10,21 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        Text("Hello, World!")
+        HStack {
+            NavigationView {
+                List {
+                    Text("Sequence")
+                    Text("Here")
+                }.frame(minWidth: 250, maxWidth: 350)
+            }
+            .listStyle(SidebarListStyle()) // Detail view actions
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            // right side
+            List {
+                Text("State")
+                Text("Here")
+            }
+        }
     }
 }
 
