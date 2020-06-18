@@ -12,14 +12,14 @@ import SwiftSocket
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
-
+    
     var window: NSWindow!
-
-
+    
+    
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Create the SwiftUI view that provides the window contents.
         let contentView = ContentView()
-
+        
         // Create the window and set the content view. 
         window = NSWindow(
             contentRect: NSRect(x: 0, y: 0, width: 480, height: 300),
@@ -31,19 +31,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.makeKeyAndOrderFront(nil)
         
         
+        var message = ""
         
         
         func echoService(client: TCPClient) {
             print("Newclient from:\(client.address)[\(client.port)]")
-            var d = client.read(1024*10)
-            client.send(data: d!)
+            while true {
+                guard let d = client.read(1, timeout: 1) else { continue }
+                
+                let c = String(bytes: d, encoding: .utf8)
+                message += c!
+                
+                if (c == "\n") {        // '\n'
+                    do {
+                        print("hi")
+                        print(message)
+                        print(message.count)
+                    }
+                }
+            }
             client.close()
         }
-
+        
         func testServer() {
             let server = TCPServer(address: "127.0.0.1", port: 8080)
             switch server.listen() {
-              case .success:
+            case .success:
                 while true {
                     if var client = server.accept() {
                         echoService(client: client)
@@ -51,18 +64,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         print("accept error")
                     }
                 }
-              case .failure(let error):
+            case .failure(let error):
                 print(error)
             }
         }
         
-        testServer()
+//        testServer()
     }
-
+    
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
     }
-
-
+    
+    
 }
 
