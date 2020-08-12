@@ -14,7 +14,7 @@ struct AppView : View {
             HStack {
                 Left()
                     .frame(maxWidth: geometry.size.width / 5, maxHeight: .infinity)
-                    .background(Color.yellow)
+                //                    .background(Color.red)
                 
                 Middle()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -29,8 +29,17 @@ struct AppView : View {
 }
 
 struct Left: View {
+    @State var items = Array(1...600)
+    
     var body: some View {
-        Text("Left")
+            VStack {
+                List(items, id: \.self) {
+                    Text("\($0)…")
+                        .font(.body)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .id(UUID())
+            }
     }
 }
 struct Middle: View {
