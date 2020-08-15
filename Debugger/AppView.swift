@@ -29,22 +29,41 @@ struct AppView : View {
 }
 
 struct Left: View {
-    @State var items = Array(1...600)
+    @EnvironmentObject var controller: Controller
     
     var body: some View {
-            VStack {
-                List(items, id: \.self) {
-                    Text("\($0)…")
-                        .font(.body)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+        VStack {
+            List(controller.events.filter {$0.isParent}, id: \.self) { item in
+                Text("\(item.id)…")
+                    .font(.body)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .onTapGesture {
+                        self.controller.filteredEvents = item.sequenceName
+                        print("tapped left view \(item.sequenceName)")
+                        print("Function: \(#function), line: \(#line) \(#file)") 
+                        
+                        
                 }
-                .id(UUID())
             }
+            .id(UUID())
+        }
     }
 }
 struct Middle: View {
+    @EnvironmentObject var controller: Controller
+    
     var body: some View {
-        Text("Middle")
+        VStack {
+            List(controller.events.filter {$0.sequenceName == controller.filteredEvents}, id: \.self) {
+                Text("\($0.details)…")
+                    .font(.body)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .onTapGesture {
+                        
+                }
+            }
+            .id(UUID())
+        }
     }
 }
 struct Right: View {

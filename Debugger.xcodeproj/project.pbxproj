@@ -13,6 +13,9 @@
 		FA4BDE36249378AB00A333BF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA4BDE35249378AB00A333BF /* Assets.xcassets */; };
 		FA4BDE39249378AB00A333BF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA4BDE38249378AB00A333BF /* Preview Assets.xcassets */; };
 		FA4BDE3C249378AB00A333BF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA4BDE3A249378AB00A333BF /* Main.storyboard */; };
+		FA5AA46724E5127E00110191 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5AA46624E5127E00110191 /* Event.swift */; };
+		FA5AA46924E5147900110191 /* Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5AA46824E5147900110191 /* Controller.swift */; };
+		FA5AA46B24E7BF9D00110191 /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5AA46A24E7BF9D00110191 /* Socket.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +30,9 @@
 		FA4BDE3B249378AB00A333BF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		FA4BDE3D249378AB00A333BF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FA4BDE3E249378AB00A333BF /* Debugger.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Debugger.entitlements; sourceTree = "<group>"; };
+		FA5AA46624E5127E00110191 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		FA5AA46824E5147900110191 /* Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Controller.swift; sourceTree = "<group>"; };
+		FA5AA46A24E7BF9D00110191 /* Socket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Socket.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +92,9 @@
 				FA4BDE3D249378AB00A333BF /* Info.plist */,
 				FA4BDE3E249378AB00A333BF /* Debugger.entitlements */,
 				FA4BDE37249378AB00A333BF /* Preview Content */,
+				FA5AA46624E5127E00110191 /* Event.swift */,
+				FA5AA46824E5147900110191 /* Controller.swift */,
+				FA5AA46A24E7BF9D00110191 /* Socket.swift */,
 			);
 			path = Debugger;
 			sourceTree = "<group>";
@@ -214,7 +223,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA4BDE34249378A700A333BF /* AppView.swift in Sources */,
+				FA5AA46724E5127E00110191 /* Event.swift in Sources */,
+				FA5AA46B24E7BF9D00110191 /* Socket.swift in Sources */,
 				FA4BDE32249378A700A333BF /* AppDelegate.swift in Sources */,
+				FA5AA46924E5147900110191 /* Controller.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
