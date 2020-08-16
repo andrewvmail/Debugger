@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Event: Hashable {
+struct Event: Hashable, Codable {
     var isParent: Bool
     var sequenceId: UUID
     var sequenceName: String

@@ -8,9 +8,6 @@
 
 import Cocoa
 import SwiftUI
-import SwiftSocket
-
-var message = ""
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -30,10 +27,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.setFrameAutosaveName("Main Window")
         window.contentView = NSHostingView(rootView: contentView)
         window.makeKeyAndOrderFront(nil)
-        Socket().start()
-    }
-    
-    func applicationWillTerminate(_ aNotification: Notification) {
-        // Insert code here to tear down your application
+        Socket().start(contoller: controller)
     }
 }
