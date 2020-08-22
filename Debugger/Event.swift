@@ -10,9 +10,9 @@ import Foundation
 
 struct Event: Hashable, Codable {
     var isParent: Bool
-    var sequenceId: UUID
-    var sequenceName: String
-    var actionName: String
+    var isChild: Bool
+    var functionName: String
+    var parentId: UUID
     var id: UUID
     var source: String
     var name: String

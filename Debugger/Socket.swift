@@ -18,8 +18,8 @@ class Socket {
             let run:Bool=true
         
             while run{
-                let (data,remoteip,remoteport) = server.recv(1024)
-                print("recive\(remoteip);\(remoteport)")
+                let (data,remoteip,_) = server.recv(1024)
+//                print("recive\(remoteip);\(remoteport)")
                 if let d=data{
                     if let str=String(bytes: d, encoding: String.Encoding.utf8){
                         let decoder = JSONDecoder()
@@ -33,7 +33,6 @@ class Socket {
                         }
                     }
                 }
-                print(remoteip)
             }
         }
     }

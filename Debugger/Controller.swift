@@ -9,152 +9,14 @@
 import Foundation
 
 class Controller: ObservableObject {
-    @Published var filteredEvents = ""
+    @Published var filteredEvents = UUID()
+    @Published var workDir = ""
     @Published var events : [Event] = [
         Event(
             isParent: true,
-            sequenceId: UUID() ,
-            sequenceName: "momo123",
-            actionName: "MOMO",
-            id: UUID(),
-            source: "MOMO",
-            name: "MOMO",
-            details: "MOO"
-        ),
-        Event(
-            isParent: true,
-            sequenceId: UUID() ,
-            sequenceName: "momo123",
-            actionName: "MOMO",
-            id: UUID(),
-            source: "MOMO",
-            name: "MOMO",
-            details: "MOO"
-        ),
-        Event(
-            isParent: false,
-            sequenceId: UUID() ,
-            sequenceName: "momo",
-            actionName: "MOMO",
-            id: UUID(),
-            source: "MOMO",
-            name: "MOMO",
-            details: "MOO"
-        ),
-        Event(
-            isParent: false,
-            sequenceId: UUID() ,
-            sequenceName: "momo",
-            actionName: "MOMO",
-            id: UUID(),
-            source: "MOMO",
-            name: "MOMO",
-            details: "MOO"
-        ),
-        Event(
-            isParent: false,
-            sequenceId: UUID() ,
-            sequenceName: "momo",
-            actionName: "MOMO",
-            id: UUID(),
-            source: "MOMO",
-            name: "MOMO",
-            details: "MOO"
-        ),
-        Event(
-            isParent: false,
-            sequenceId: UUID() ,
-            sequenceName: "momo",
-            actionName: "MOMO",
-            id: UUID(),
-            source: "MOMO",
-            name: "MOMO",
-            details: "MOO"
-        ),
-        Event(
-            isParent: false,
-            sequenceId: UUID() ,
-            sequenceName: "momo",
-            actionName: "MOMO",
-            id: UUID(),
-            source: "MOMO",
-            name: "MOMO",
-            details: "MOO"
-        ),
-        Event(
-            isParent: false,
-            sequenceId: UUID() ,
-            sequenceName: "momo",
-            actionName: "MOMO",
-            id: UUID(),
-            source: "MOMO",
-            name: "MOMO",
-            details: "MOO"
-        ),
-        Event(
-            isParent: false,
-            sequenceId: UUID() ,
-            sequenceName: "momo",
-            actionName: "MOMO",
-            id: UUID(),
-            source: "MOMO",
-            name: "MOMO",
-            details: "MOO"
-        ),
-        Event(
-            isParent: false,
-            sequenceId: UUID() ,
-            sequenceName: "momo",
-            actionName: "MOMO",
-            id: UUID(),
-            source: "MOMO",
-            name: "MOMO",
-            details: "MOO"
-        ),
-        Event(
-            isParent: false,
-            sequenceId: UUID() ,
-            sequenceName: "momo",
-            actionName: "MOMO",
-            id: UUID(),
-            source: "MOMO",
-            name: "MOMO",
-            details: "MOO"
-        ),
-        Event(
-            isParent: false,
-            sequenceId: UUID() ,
-            sequenceName: "momo",
-            actionName: "MOMO",
-            id: UUID(),
-            source: "MOMO",
-            name: "MOMO",
-            details: "MOO"
-        ),
-        Event(
-            isParent: false,
-            sequenceId: UUID() ,
-            sequenceName: "momo",
-            actionName: "MOMO",
-            id: UUID(),
-            source: "MOMO",
-            name: "MOMO",
-            details: "MOO"
-        ),
-        Event(
-            isParent: false,
-            sequenceId: UUID() ,
-            sequenceName: "momo",
-            actionName: "MOMO",
-            id: UUID(),
-            source: "MOMO",
-            name: "MOMO",
-            details: "MOO"
-        ), Event(
-            isParent: false,
-            sequenceId: UUID() ,
-            sequenceName: "momo",
-            actionName: "MOMO",
+            isChild: false,
+            functionName: "MOMO",
+            parentId: UUID(),
             id: UUID(),
             source: "MOMO",
             name: "MOMO",
@@ -162,4 +24,10 @@ class Controller: ObservableObject {
         ),
     ]
     
+    func clearEvents() -> Void {
+        self.events = []
+    }
+    func setWorkDir(string: String) -> Void {
+        self.workDir = string
+    }
 }

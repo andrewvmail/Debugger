@@ -9,20 +9,39 @@
 import SwiftUI
 
 struct AppView : View {
+    @EnvironmentObject var controller: Controller
+    @State var workDir: String = ""
+    
     var body: some View {
         GeometryReader { geometry in
-            HStack {
-                Left()
-                    .frame(maxWidth: geometry.size.width / 5, maxHeight: .infinity)
-                //                    .background(Color.red)
-                
-                Middle()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color.blue)
-                
-                Right()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color.green)
+            VStack {
+                HStack {
+                    TextField(
+                        "Enter working directory...",
+                        text: self.$workDir,
+                        onCommit: {
+                            self.controller.setWorkDir(string: self.workDir)
+                    })
+                    Button(action: {
+                        print("Delete button tapped!")
+                        self.controller.clearEvents()
+                    }) {
+                        Text("Clear")
+                    }
+                }
+                HStack {
+                    Left()
+                        .frame(maxWidth: geometry.size.width / 5, maxHeight: .infinity)
+                    //                    .background(Color.red)
+                    
+                    Middle()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(Color.blue)
+                    
+                    Right()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(Color.green)
+                }
             }
         }
     }
@@ -34,18 +53,24 @@ struct Left: View {
     var body: some View {
         VStack {
             List(controller.events.filter {$0.isParent}, id: \.self) { item in
-                Text("\(item.id)…")
-                    .font(.body)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .onTapGesture {
-                        self.controller.filteredEvents = item.sequenceName
-                        print("tapped left view \(item.sequenceName)")
-                        print("Function: \(#function), line: \(#line) \(#file)") 
-                        
-                        
+                Button(action: {
+                    self.controller.filteredEvents = item.parentId
+                }) {
+                   Text(item.functionName)
                 }
+//                Text(item.functionName)
+//                    .font(.body)
+//                    .frame(maxWidth: .infinity, alignment: .leading)
+//                    .onTapGesture {
+//                        self.controller.filteredEvents = item.parentId
+//                        print("tapped left view \(item.source)")
+//                        //                        print("Function: \(#function), line: \(#line) \(#file)")
+//
+//
+//                }
             }
             .id(UUID())
+            
         }
     }
 }
@@ -54,12 +79,27 @@ struct Middle: View {
     
     var body: some View {
         VStack {
-            List(controller.events.filter {$0.sequenceName == controller.filteredEvents}, id: \.self) {
-                Text("\($0.details)…")
-                    .font(.body)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .onTapGesture {
+            List(controller.events.filter {$0.parentId == controller.filteredEvents}, id: \.self) {  item in
+                HStack {
+                    Text(item.functionName)
+                        .font(.body)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .onTapGesture {
+                            print("tapped middle view \(item.source)")
+                    }
+                    Button(action: {
+//                        let pasteBoard = NSPasteboard.general
+//                        pasteBoard.clearContents()
+//                        pasteBoard.setString("subl " + self.controller.workDir + item.source, forType: .string)
                         
+                        let task = Process()
+                        task.launchPath = "/Users/momo/bin/subl"
+                        task.arguments = ["/Users/momo/Desktop/" + item.source]
+                        task.launch()
+                        
+                    }) {
+                        Text(item.source)
+                    }
                 }
             }
             .id(UUID())
