@@ -94,7 +94,7 @@ struct Middle: View {
                         
                         let task = Process()
                         task.launchPath = "/Users/momo/bin/subl"
-                        task.arguments = ["/Users/momo/Desktop/" + item.source]
+                        task.arguments = [ self.controller.workDir + item.source]
                         task.launch()
                         
                     }) {

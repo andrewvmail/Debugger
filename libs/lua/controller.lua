@@ -1,3 +1,4 @@
+local json = require "json"
 local socket = require "socket"
 
 local controller = {}
@@ -5,6 +6,7 @@ local sequences = {}
 local Controller = {}
 local tracks = {}
 local funcs = {}
+local providers = {}
 
 
 function getName(funct)
@@ -40,11 +42,18 @@ local function uuid()
     end)
 end
 
-local function bug(isParent, isChild, name, id, source)
+local function bug(isParent, isChild, name, parentId, source, actionId, propsIn, propsOut)
+	print(dump(actionId))
+
+	if actionId == nil then
+		actionId = uuid()
+	end
+	-- print(dump(actionId), parentId)
 	udp:send(
 	'{"isParent": '.. isParent ..', "isChild": '.. isChild ..',  "functionName": '.. '"' .. name .. '"'
-	..', "parentId": "'.. id ..'", "id": '.. '"' .. uuid() .. '"' ..
-	', "source": "'.. source ..'", "name": "andrew", "details": "momo"}'
+	..', "parentId": "'.. parentId ..'", "id": '.. '"' .. actionId .. '"' ..
+	', "source": "'.. source ..'", "name": "andrew", "details": "momo", "propsIn": "'.. (propsIn or "") ..'", '
+	..'"propsOut": "'.. (propsOut or "") ..'"}'
 	) 
 end 
 
@@ -58,48 +67,49 @@ udp = socket.udp()
 udp:setpeername(address, port)
 udp:settimeout(-1)
 
-math.randomseed(os.time()) 
-entity = tostring(math.random(99999))
+-- math.randomseed(os.time()) 
+-- entity = tostring(math.random(99999))
 
-local function run(context, sequence, props, name, runCoordinator)
+function tableMerge(t1, t2)
+    for k,v in pairs(t2) do
+        if type(v) == "table" then
+            if type(t1[k] or false) == "table" then
+                tableMerge(t1[k] or {}, t2[k] or {})
+            else
+                t1[k] = v
+            end
+        else
+            t1[k] = v
+        end
+    end
+    return t1
+end
 
-	if not runCoordinator["sentName"] then
-		runCoordinator["id"] = uuid()
-		bug("true", "false", name, runCoordinator["id"], "")
-		runCoordinator["sentName"] = true
+
+
+local function run(context, sequence, props, name)
+	if not context["runId"] then
+		-- initial run in, this can recurse
+		local runId = uuid()
+		context["runId"] = runId 
+		bug("true", "false", name, runId, "")
 	end
-
-	-- name, val = debug.getlocal (1, 2)
-	-- print(name, val)
-	-- local info = debug.getinfo(3)
-	-- print('debug')
-
-	-- print(dump(info))
-
-	local lastContext = {}
 
 	-- traverse
 	for k, v in pairs(sequence) do
 	  if type(v) == "table" then
-	  	-- runCoordinator["currentTable"] = k
-	  	-- print('k', k, v, functionName)
-
-	  	local path = runCoordinator["nextContext"]["path"]
-	  	run(lastContext, v[path], props, k, runCoordinator)
+	  	-- if its a table previous thing has a path
+	  	local path = context["props"]["path"]
+	  	run(context, v[path], props, k)
 	  end
 	  if type(v) == "function" then
-	  	if runCoordinator["currentTable"] == lastContext["path"] then
 	  		local fname = getName(v)
-	  		-- print(dump(tracks))
-	  		-- print('hhhhhhhhhhhhhhhhhhhh', fname)
-	  		bug("false", "true", fname, runCoordinator["id"], tracks[fname])
-	  		runCoordinator["nextContext"] = v()
-	  		runCoordinator["currentTable"] = nil
-	  	elseif not runCoordinator[nextHasPath] then
-	  		local fname = getName(v)
-	  		bug("false", "true", fname, runCoordinator["id"], tracks[fname])
-	  		lastContext = v()
-	  	end
+	  		local actionId = uuid()
+	  		bug("false", "true", fname, context["runId"], tracks[fname], actionId, json.encode(context["props"]))
+	  		context["props"] = tableMerge(context["props"] or {}, v(context) or {})
+	  		bug("false", "true", fname, context["runId"], tracks[fname], actionId, nil, json.encode(context["props"]))
+	  		-- print('^^^^^^^^^^^^^^')
+	  		-- print(json.encode(context["props"]))
 	  end
 	end
 end
@@ -109,18 +119,20 @@ function controller.registerSequence(name, sequence)
 	sequences[name] = sequence
 end
 
+function controller.registerProvider(name, provider)
+	providers[name] = provider 
+end
+
+
 function controller.getSequence(name)
 	local sequence = sequences[name]
-	return function()
-
-		local runCoordinator = {
-			["currentTable"] = nil,
-			["nextHasPath"] = false,
-			["nextContext"] = {},
-			["sentName"] = false
+	return function(props)
+		local ctx = {
+			["providers"]	= providers,
+			["props"] = props
 		}
 
-		run({}, sequence, {}, name, runCoordinator)
+		run(ctx, sequence, props, name)
 	end
 end
 
