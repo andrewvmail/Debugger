@@ -10,7 +10,7 @@ import Foundation
 import SwiftSocket
 
 class Socket {
-    func start(contoller: Controller) {
+    func start(controller: Controller) {
         print("👁 Socket.start()")
         let backgroundQueue = DispatchQueue.global(qos: .background)
         backgroundQueue.async {
@@ -26,7 +26,11 @@ class Socket {
                         do {
                             let event = try decoder.decode(Event.self, from: Data(str.utf8))
                             DispatchQueue.main.async {
-                                contoller.events.append(event)
+                                if(controller.idsSeen.contains(event.id)) {
+                                    return;
+                                }
+                                controller.events.append(event)
+                                controller.idsSeen.append(event.id)
                             }
                         } catch {
                             print("🤬", error.localizedDescription)

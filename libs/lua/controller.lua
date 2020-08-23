@@ -43,18 +43,22 @@ local function uuid()
 end
 
 local function bug(isParent, isChild, name, parentId, source, actionId, propsIn, propsOut)
-	print(dump(actionId))
-
 	if actionId == nil then
 		actionId = uuid()
 	end
-	-- print(dump(actionId), parentId)
-	udp:send(
-	'{"isParent": '.. isParent ..', "isChild": '.. isChild ..',  "functionName": '.. '"' .. name .. '"'
+	if propsIn then
+		propsIn = propsIn:gsub('"', '\\"')
+	end
+	if propsOut then
+		propsOut = propsOut:gsub('"', '\\"')
+	end
+
+	local toSend = '{"isParent": '.. isParent ..', "isChild": '.. isChild ..',  "functionName": '.. '"' .. name .. '"'
 	..', "parentId": "'.. parentId ..'", "id": '.. '"' .. actionId .. '"' ..
 	', "source": "'.. source ..'", "name": "andrew", "details": "momo", "propsIn": "'.. (propsIn or "") ..'", '
 	..'"propsOut": "'.. (propsOut or "") ..'"}'
-	) 
+
+	udp:send(toSend)
 end 
 
 

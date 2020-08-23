@@ -11,18 +11,8 @@ import Foundation
 class Controller: ObservableObject {
     @Published var filteredEvents = UUID()
     @Published var workDir = ""
-    @Published var events : [Event] = [
-        Event(
-            isParent: true,
-            isChild: false,
-            functionName: "MOMO",
-            parentId: UUID(),
-            id: UUID(),
-            source: "MOMO",
-            name: "MOMO",
-            details: "MOO"
-        ),
-    ]
+    @Published var events : [Event] = []
+    @Published var idsSeen: [UUID] = []
     
     func clearEvents() -> Void {
         self.events = []

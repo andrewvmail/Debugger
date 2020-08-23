@@ -17,5 +17,7 @@ struct Event: Hashable, Codable {
     var source: String
     var name: String
     var details: String
+    var propsIn: String
+    var propsOut: String
 }
 
